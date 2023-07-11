@@ -1,0 +1,20 @@
+Package LibraryManagement
+
+System LibraryApp "Library Management System" : Application
+
+Actor a_Student : User [description "Student User"]
+
+// Insert the DataEntity specification here
+
+DataEntity e_Book "Book" :Master [
+  attribute ISBN: String
+  attribute Title: String
+  attribute Author: String
+]
+
+DataEntity e_Author "Author" : Master [
+  attribute AuthorID : String
+  attribute FirstName : String
+  attribute LastName : String
+]
+

@@ -1,0 +1,64 @@
+/*
+ * Demo graph file
+ */
+Package itoi
+
+
+System ItoiDemo "ItoiDemo" : Application : Application_Web
+
+
+
+DataEntity e_Invoice "Invoice" : Document : Regular [
+    attribute ID "Invoice ID" : Integer [constraints (PrimaryKey NotNull Unique)]
+    description "Invoices" ]
+
+
+Actor a_Operator "Operator" : User
+Actor a_Manager "Manager" : User
+
+// Customer Actions
+ActionType aClose "Close" [description "Close the current Interaction Space (Form, Windows, Dialog, etc.)"]
+ActionType aApprove "Approve" [description "Approve Invoice"]
+ActionType aReject "Reject" [description "Do not Approve Invoice"]
+ActionType aPrint "Print" [description "Print Invoice"]
+
+UseCase uc_1_ManageInvoices "Manage Invoices" : EntitiesManage [
+  primaryActor a_Manager
+  dataEntity e_Invoice
+  actions aClose
+  extensionPoints xp_ConsultInvoice, xp_AddInvoice]
+
+
+UseCase uc_2_ConsultInvoice "Consult Invoice" : EntityRead [
+  primaryActor a_Manager
+  dataEntity e_Invoice
+  actions aClose
+  extensionPoints xp_Approve, xp_Print
+   extends uc_1_ManageInvoices onExtensionPoint xp_ConsultInvoice]
+
+UseCase uc_3_AddInvoice "Add Invoice" : EntityCreate [
+  primaryActor a_Manager
+  dataEntity e_Invoice
+  actions aClose
+   extends uc_1_ManageInvoices onExtensionPoint xp_AddInvoice]
+
+UseCase uc_2_1_ApproveInvoice "Approve Invoice" : EntityUpdate [
+  primaryActor a_Manager
+  dataEntity e_Invoice
+  actions aApprove, aReject, aClose 
+  extends uc_2_ConsultInvoice onExtensionPoint xp_Approve]
+
+UseCase uc_2_2_PrintInvoice "Print Invoice" : EntityReport [
+    primaryActor a_Operator
+    dataEntity e_Invoice
+    actions aPrint, aClose 
+    extends uc_2_ConsultInvoice onExtensionPoint xp_Print
+]
+
+
+View demoView "Complex UseCase Diagram": UseCaseView 
+[ uc_1_ManageInvoices, uc_2_1_ApproveInvoice, uc_2_2_PrintInvoice, a_Operator, a_Manager ]
+
+View v_UsecaseDiagram1 "Simple UseCase Diagram": UseCaseView 
+[a_Manager, a_Operator, uc_1_ManageInvoices, uc_2_ConsultInvoice, uc_2_1_ApproveInvoice, uc_2_2_PrintInvoice]
+

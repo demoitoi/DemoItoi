@@ -1,0 +1,275 @@
+{
+  "packages": [
+    {
+      "name": "BillingSystem",
+      "system": {
+        "name": "Billing_App",
+        "nameAlias": "BillingSystem (Application Level)",
+        "type": {
+          "type": "Application"
+        },
+        "isFinal": true,
+        "systemConcepts": [
+          {
+            "name": "lr_Actor_Name",
+            "nameAlias": "Actor name",
+            "type": {
+              "type": "Morphology"
+            },
+            "property": {
+              "element": {
+                "element": {
+                  "type": "Actor"
+                }
+              },
+              "property": "name"
+            },
+            "pattern": [
+              {
+                "parts": [
+                  {
+                    "posTag": "Noun"
+                  },
+                  {
+                    "posTag": "ProperNoun"
+                  }
+                ]
+              }
+            ],
+            "severity": "Error",
+            "description": "Actor name must be a noun"
+          },
+          {
+            "name": "lr_Usecase_Name",
+            "nameAlias": "UseCase name",
+            "type": {
+              "type": "Morphology"
+            },
+            "property": {
+              "element": {
+                "element": {
+                  "type": "UseCase"
+                }
+              },
+              "property": "name"
+            },
+            "pattern": [
+              {
+                "parts": [
+                  {
+                    "posTag": "Verb"
+                  }
+                ]
+              },
+              {
+                "parts": [
+                  {
+                    "element": {
+                      "element": {
+                        "type": "DataEntity"
+                      }
+                    },
+                    "property": "name"
+                  }
+                ]
+              }
+            ],
+            "severity": "Error",
+            "description": "UseCase name must follow the pattern 'Verb + DataEntity.name'"
+          },
+          {
+            "name": "e_VAT",
+            "nameAlias": "Value Added Tax",
+            "type": {
+              "type": "Reference"
+            },
+            "attributes": [
+              {
+                "name": "Code",
+                "nameAlias": "Code",
+                "type": {
+                  "type": "Integer"
+                },
+                "constraint": {
+                  "isPrimaryKey": "PrimaryKey",
+                  "checks": []
+                },
+                "tags": []
+              },
+              {
+                "name": "Name",
+                "nameAlias": "Name",
+                "type": {
+                  "type": "String",
+                  "size": "30"
+                },
+                "tags": []
+              },
+              {
+                "name": "Value",
+                "nameAlias": "Value",
+                "type": {
+                  "type": "Decimal",
+                  "size": "2.1"
+                },
+                "constraint": {
+                  "isNotNull": "NotNull",
+                  "checks": []
+                },
+                "tags": []
+              }
+            ],
+            "description": "Value Added Tax",
+            "tags": []
+          },
+          {
+            "name": "e_Invoice",
+            "nameAlias": "Invoice",
+            "type": {
+              "type": "Document"
+            },
+            "attributes": [],
+            "tags": []
+          },
+          {
+            "name": "trm_Customer",
+            "nameAlias": "Customer",
+            "type": {
+              "type": "Noun"
+            },
+            "synonyms": [
+              "Client"
+            ],
+            "tags": []
+          },
+          {
+            "name": "stk_User",
+            "nameAlias": "User",
+            "type": {
+              "type": "Person"
+            },
+            "subType": {
+              "type": "Person_User"
+            },
+            "tags": []
+          },
+          {
+            "name": "stk_Operator",
+            "nameAlias": "Engineer",
+            "type": {
+              "type": "Person"
+            },
+            "subType": {
+              "type": "Person_User"
+            },
+            "super": {
+              "$ref": "#/packages@0/system/systemConcepts@5"
+            },
+            "tags": []
+          },
+          {
+            "name": "stk_SysAdmin",
+            "nameAlias": "System Administrator",
+            "type": {
+              "type": "Person"
+            },
+            "subType": {
+              "type": "Person_User"
+            },
+            "tags": []
+          },
+          {
+            "name": "a_Admin",
+            "nameAlias": "TechnicalAdministrator",
+            "type": {
+              "type": "User"
+            },
+            "tags": []
+          },
+          {
+            "name": "a_Manager",
+            "nameAlias": "Manager",
+            "type": {
+              "type": "User"
+            },
+            "description": "Approve Invoices, etc.",
+            "tags": []
+          },
+          {
+            "name": "a_Customer",
+            "nameAlias": "Customer",
+            "type": {
+              "type": "User"
+            },
+            "stakeholder": {
+              "$ref": "#/packages@0/system/systemConcepts@5"
+            },
+            "description": "Receive Invoices to pay",
+            "tags": []
+          },
+          {
+            "name": "aClose",
+            "nameAlias": "Close",
+            "description": "Close the current Interaction Space (Form, Windows, Dialog, etc.)"
+          },
+          {
+            "name": "aApprove",
+            "nameAlias": "Approve",
+            "description": "Approve Invoice"
+          },
+          {
+            "name": "aReject",
+            "nameAlias": "Reject",
+            "description": "Do not Approve Invoice"
+          },
+          {
+            "name": "uc_1_ApproveInvoice",
+            "nameAlias": "Approve Invoice",
+            "type": {
+              "type": "EntityUpdate"
+            },
+            "primaryActor": {
+              "$ref": "#/packages@0/system/systemConcepts@9"
+            },
+            "dataEntity": {
+              "$ref": "#/packages@0/system/systemConcepts@3"
+            },
+            "actions": {
+              "actions": [
+                {
+                  "type": {
+                    "$ref": "#/packages@0/system/systemConcepts@12"
+                  }
+                },
+                {
+                  "type": {
+                    "$ref": "#/packages@0/system/systemConcepts@13"
+                  }
+                },
+                {
+                  "type": {
+                    "$ref": "#/packages@0/system/systemConcepts@11"
+                  }
+                }
+              ]
+            },
+            "acceptanceCriteria": [],
+            "extends": [],
+            "isAbstract": false,
+            "isConcrete": false,
+            "isNegative": false,
+            "isPositive": false,
+            "isProblem": false,
+            "isSolution": false,
+            "mainScenarios": [],
+            "supportingActors": [],
+            "tags": []
+          }
+        ],
+        "isReusable": false,
+        "tags": []
+      },
+      "imports": []
+    }
+  ]
+}

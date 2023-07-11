@@ -1,0 +1,11 @@
+Package SalesManagement
+
+Import BillingSystem.*
+Import LibraryManagement.*
+
+
+System SalesManagement: Application
+
+IncludeAll fromSystem Billing_App
+IncludeAll fromSystem LibraryApp
+

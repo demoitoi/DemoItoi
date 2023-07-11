@@ -1,0 +1,71 @@
+Package BillingSystem
+ 
+/********************************************************
+   System definition  
+*********************************************************/
+System Billing_App "BillingSystem (Application Level)" : Application [ isFinal ]
+
+
+LinguisticRule lr_Actor_Name "Actor name" : Morphology [
+    property Actor.name
+    pattern ( Noun | ProperNoun)
+    severity Error
+    description "Actor name must be a noun"]
+
+LinguisticRule lr_Usecase_Name "UseCase name" : Morphology [
+    property UseCase.name
+    pattern Verb + DataEntity.name 
+    severity Error
+    description "UseCase name must follow the pattern 'Verb + DataEntity.name'"]
+
+
+/********************************************************
+   DataEntities view
+*********************************************************/  
+DataEntity e_VAT "Value Added Tax" : Reference [
+  attribute Code "Code" : Integer [constraints (PrimaryKey)]
+  attribute Name "Name" : String(30)
+  attribute Value "Value" : Decimal(2.1) [constraints (NotNull)] 
+  description "Value Added Tax"]
+
+DataEntity e_Invoice "Invoice" : Document []
+
+Term trm_Customer "Customer": Noun [synonyms "Client"]
+
+/********************************************************
+   Stakeholder view
+*********************************************************/
+Stakeholder stk_User "User" : Person : Person_User
+Stakeholder stk_Operator "Engineer" : Person : Person_User [isA stk_User ]
+Stakeholder stk_SysAdmin "System Administrator" : Person : Person_User 
+
+
+Actor a_Admin "TechnicalAdministrator" : User
+Actor a_Manager "Manager" : User [description "Approve Invoices, etc."]
+Actor a_Customer "Customer" : User [stakeholder stk_User description "Receive Invoices to pay"]
+//Actor a_Customer "Client" : User [stakeholder stk_Client description "Receive Invoices to pay"]
+
+/*
+ * Requirements: UseCases
+ */  
+// Customer Actions
+ActionType aClose "Close" [description "Close the current Interaction Space (Form, Windows, Dialog, etc.)"]
+ActionType aApprove "Approve" [description "Approve Invoice"]
+ActionType aReject "Reject" [description "Do not Approve Invoice"]
+
+UseCase uc_1_ManageInvoices "Manage Invoices" : EntitiesManage [
+  primaryActor a_Manager
+  dataEntity e_Invoice
+  actions aClose 
+  extensionPoints xp_Approve]
+
+UseCase uc_2_ApproveInvoice "Approve Invoice" : EntityUpdate [
+  primaryActor a_Manager
+  dataEntity e_Invoice
+  actions aApprove, aReject, aClose 
+  extends uc_1_ManageInvoices onExtensionPoint xp_Approve]
+
+
+View v_UsecaseDiagram1 "Simple UseCase Diagram": UseCaseView 
+[uc_2_ApproveInvoice, uc_2_ApproveInvoice]
+
