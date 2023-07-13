@@ -1,0 +1,18 @@
+System: Billing_App (BillingSystem (Application Level))
+isFinal
+----------------------------------------
+
+#Stakeholders
+----------------------------------------
+Person_User
+ User  (stk_User) is a Person_User.
+Person_User
+ Operator  (stk_Operator) is a Person_User.
+Person_User
+ System Administrator  (stk_SysAdmin) is a Person_User.
+
+#Actors
+----------------------------------------
+Administrator (a_Admin) is a User, described as Manage Users, VAT, etc..
+Manager (a_Manager) is a User, described as Approve Invoices, etc..
+Customer (a_Customer) is a User, described as Receive Invoices to pay.

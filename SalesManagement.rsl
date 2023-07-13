@@ -1,0 +1,71 @@
+Package SalesManagement
+
+Import BillingSystem.*
+Import LibraryManagement.*
+
+System SalesManagement: Application
+
+Term trm_Customer "Customer": Noun [synonyms "Client"]
+
+Term trm_Operator "Operator": Noun [synonyms "Engineer"]
+
+LinguisticRule lr_Actor_Name "Actor name" : Morphology [
+    property Actor.name
+    pattern ( Noun | ProperNoun)
+    severity Error
+    description "Actor name must be a noun"
+]
+
+LinguisticRule lr_Stakeholder_Name "Stakeholder name" : Morphology [
+    property Stakeholder.name
+    pattern ( Noun | ProperNoun)
+    severity Error
+    description "Stakeholder name must be a noun"
+]
+
+LinguisticRule lr_DataEntity_Name "DataEntity name" : Morphology [
+    property DataEntity.name
+    pattern ( Noun | ProperNoun)
+    severity Error
+    description "DataEntity name must be a noun"
+]
+
+LinguisticRule lr_UseCase_Name "UseCase name" : Morphology [
+    property UseCase.name
+    pattern Verb + DataEntity.name 
+    severity Error
+    description "UseCase name must be a noun"
+]
+
+DataEntity e_VAT "Value" : Reference [
+  attribute Code "Code" : Integer [constraints (PrimaryKey)]
+  attribute Name "Name" : String(30)
+  attribute Value "Value" : Decimal(2.1) [constraints (NotNull)] 
+  description "Value Added Tax"]
+
+Stakeholder stk_User "User" : Person : Person_User
+
+Stakeholder stk_Operator "Operator" : Person : Person_User [isA stk_User ]
+
+Stakeholder stk_SysAdmin "System" : Person : Person_User  [isA stk_User]
+
+Actor a_Admin "Administrator" : User [stakeholder stk_SysAdmin description "Manage Users, VAT, etc."]
+
+Actor a_Manager "Manager" : User [description "Approve Invoices, etc."]
+
+Actor a_Customer "Customer" : User [stakeholder stk_User description "Receive Invoices to pay"]
+
+ActionType aClose "Close" [description "Close the current Interaction Space (Form, Windows, Dialog, etc.)"]
+
+ActionType aApprove "Approve" [description "Approve Invoice"]
+
+ActionType aReject "Reject" [description "Do not Approve Invoice"]
+
+UseCase uc_1_ApproveInvoice "Approve Invoice" : EntityUpdate [
+  primaryActor a_Manager
+  actions aApprove, aReject, aClose ]
+
+DataEntity de_Invoice "Invoice" : Other
+
+
+//Actor a_Admin "Administrator" : User [stakeholder Billing_App.stk_SysAdmin description "Manage Users, VAT, etc."]
