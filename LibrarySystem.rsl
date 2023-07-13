@@ -1,0 +1,4 @@
+Package LibraryManagement
+System LibrarySystem "Library Management System" : Application
+Actor a_Student : User [description "Student User"]
+// Insert the DataEntity specification here
